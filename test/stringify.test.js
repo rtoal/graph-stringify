@@ -36,6 +36,19 @@ const firstMutual = { name: "sodium" };
 const secondMutual = { name: "chlorine", partner: firstMutual };
 firstMutual.partner = secondMutual;
 
+class Node {
+  constructor(name) {
+    this.name = name;
+    this.successors = [];
+  }
+}
+
+let [a, b, c, d] = [new Node("A"), new Node("B"), new Node("C"), new Node("D")];
+a.successors = [b, c, d];
+b.successors = [c];
+c.successors = [b, c];
+d.successors = [a, d];
+
 const fixture = [
   {
     scenario: "a basic object",
@@ -108,6 +121,14 @@ const fixture = [
     source: firstMutual,
     expected: `   1 | Object name='sodium' partner=#2
    2 | Object name='chlorine' partner=#1`,
+  },
+  {
+    scenario: "a classic graph",
+    source: a,
+    expected: `   1 | Node name='A' successors=[#2,#3,#4]
+   2 | Node name='B' successors=[#3]
+   3 | Node name='C' successors=[#2,#3]
+   4 | Node name='D' successors=[#1,#4]`,
   },
 ];
 

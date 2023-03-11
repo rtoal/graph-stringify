@@ -88,6 +88,32 @@ new Program([
 ```
 
 </td></tr>
+
+<tr><td>
+
+```
+let [a, b, c, d] = [
+  new Node("A"),
+  new Node("B"),
+  new Node("C"),
+  new Node("D")
+];
+a.successors = [b, c, d];
+b.successors = [c];
+c.successors = [b, c];
+d.successors = [a, d];
+```
+
+</td><td>
+
+```
+   1 | Node name='A' successors=[#2,#3,#4]
+   2 | Node name='B' successors=[#3]
+   3 | Node name='C' successors=[#2,#3]
+   4 | Node name='D' successors=[#1,#4]
+```
+
+</td></tr>
 </table>
 
 Additional examples are found in the test folder.
