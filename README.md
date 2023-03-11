@@ -59,7 +59,7 @@ new Program([
 ```
    1 | Program statements=[#2,#3]
    2 | Assignment target='x' source=3
-   3 | Break 
+   3 | Break
 ```
 
 </td></tr>
@@ -91,4 +91,3 @@ new Program([
 </table>
 
 Additional examples are found in the test folder.
-

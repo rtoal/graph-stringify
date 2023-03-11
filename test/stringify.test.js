@@ -27,6 +27,15 @@ class Call {
   }
 }
 
+const callMinOf1And2 = new Call("min", [1, 2]);
+
+const selfRef = { x: 1 };
+selfRef.y = selfRef;
+
+const firstMutual = { name: "sodium" };
+const secondMutual = { name: "chlorine", partner: firstMutual };
+firstMutual.partner = secondMutual;
+
 const fixture = [
   {
     scenario: "a basic object",
@@ -42,6 +51,11 @@ const fixture = [
     scenario: "an object with undefined and null and NaN",
     source: { a: undefined, b: null, c: NaN },
     expected: "   1 | Object a=undefined b=null c=NaN",
+  },
+  {
+    scenario: "an object with more numbers",
+    source: { a: 89n, b: 99.882571e5 },
+    expected: "   1 | Object a=89n b=9988257.1",
   },
   {
     scenario: "an object with booleans",
@@ -77,6 +91,23 @@ const fixture = [
    2 | Assignment target='y' source=#3
    3 | BinaryExpression op='*' left=#4 right='x'
    4 | Call callee='hypot' args=[3,5]`,
+  },
+  {
+    scenario: "an object appearing multiple times",
+    source: { a: callMinOf1And2, b: callMinOf1And2 },
+    expected: `   1 | Object a=#2 b=#2
+   2 | Call callee='min' args=[1,2]`,
+  },
+  {
+    scenario: "a self-referential object",
+    source: selfRef,
+    expected: "   1 | Object x=1 y=#1",
+  },
+  {
+    scenario: "mutual self-reference",
+    source: firstMutual,
+    expected: `   1 | Object name='sodium' partner=#2
+   2 | Object name='chlorine' partner=#1`,
   },
 ];
 
