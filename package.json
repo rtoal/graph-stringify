@@ -1,0 +1,23 @@
+{
+  "name": "graph-stringify",
+  "version": "1.0.0",
+  "description": "Compact string representation of an object graph, one node per line",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rtoal/graph-stringify.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rtoal/graph-stringify/issues"
+  },
+  "homepage": "https://github.com/rtoal/graph-stringify#readme",
+  "devDependencies": {
+    "mocha": "^10.2.0"
+  }
+}
