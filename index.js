@@ -1,6 +1,6 @@
 import util from "util";
 
-export default function stringify(root) {
+export default function stringify(root, keyProperty) {
   const tags = new Map();
 
   function tag(node) {
@@ -19,8 +19,12 @@ export default function stringify(root) {
       return util.inspect(e);
     }
     for (let [node, id] of [...tags.entries()].sort((a, b) => a[1] - b[1])) {
-      let type = node.constructor.name;
-      let props = Object.entries(node).map(([k, v]) => `${k}=${view(v)}`);
+      let type = node?.[keyProperty] ?? node.constructor.name;
+      let props = Object.entries(node);
+      if (keyProperty) {
+        props = props.filter(([k]) => k !== keyProperty);
+      }
+      props = props.map(([k, v]) => `${k}=${view(v)}`);
       yield `${String(id).padStart(4, " ")} | ${type} ${props.join(" ")}`;
     }
   }

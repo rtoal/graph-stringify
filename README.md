@@ -18,15 +18,17 @@ import stringify from "graph-stringify";
 
 ## Usage
 
-### stringify(obj)
+### stringify(obj, keyProperty)
 
-Accepts a single object argument.
+`obj` is the object to stringify. `keyProperty` is the property of the object that serves as its “type” for pretty printing. If omitted, the object’s constructor’s name is used.
 
 Basic primitives such as `undefined`, `null`, numbers, bigints, booleans, strings, and symbols are ignored when passed directly to this function.
 
-If an object is received, its object graph is written with one node per line. Each line contains the node’s constructor name followed by a list of its properties in `name=value` format. Non-object values are output in place with `util.inspect`, function values are output as `<Function>`, and object values (including arrays) are written in subsequent lines and referred to by a reference number.
+If an object is received, its object graph is written with one node per line. Each line contains the node’s type followed by a list of its properties in `name=value` format. Non-object values are output in place with `util.inspect`, function values are output as `<Function>`, and object values (including arrays) are written in subsequent lines and referred to by a reference number.
 
 ### Examples
+
+When invoked without the `keyProperty` argument:
 
 <table>
 <tr><th>Source string</th><th>Stringified</th></tr>
@@ -111,6 +113,65 @@ d.successors = [a, d];
    2 | Node name='B' successors=[#3]
    3 | Node name='C' successors=[#2,#3]
    4 | Node name='D' successors=[#1,#4]
+```
+
+</td></tr>
+</table>
+
+With the `keyProperty` argument, e.g. `stringify(obj, "kind")`:
+
+<table>
+<tr><th>Source string</th><th>Stringified</th></tr>
+
+<tr><td>
+
+```
+{
+  kind: "Program",
+  statements: [
+    { kind: "Assignment", target: "x", source: 3 },
+    { kind: "Break" },
+  ],
+}
+```
+
+</td><td>
+
+```
+   1 | Program statements=[#2,#3]
+   2 | Assignment target='x' source=3
+   3 | Break
+```
+
+</td></tr>
+
+<tr><td>
+
+```
+{
+  kind: "Program",
+  statements: [
+    {
+      kind: "Assignment",
+      target: "y",
+      source: {
+        kind: "BinaryExpression",
+        op: "*",
+        left: { kind: "Call", callee: "hypot", args: [3, 5] },
+        right: "x",
+      },
+    },
+  ],
+}
+```
+
+</td><td>
+
+```
+1 | Program statements=[#2]
+2 | Assignment target='y' source=#3
+3 | BinaryExpression op='\*' left=#4 right='x'
+4 | Call callee='hypot' args=[3,5]
 ```
 
 </td></tr>

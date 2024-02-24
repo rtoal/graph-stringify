@@ -132,6 +132,44 @@ const fixture = [
   },
 ];
 
+const fixtureWithKeyProperty = [
+  {
+    scenario: "a simple AST with a kind",
+    source: {
+      kind: "Program",
+      statements: [
+        { kind: "Assignment", target: "x", source: 3 },
+        { kind: "Break" },
+      ],
+    },
+    expected: `   1 | Program statements=[#2,#3]
+   2 | Assignment target='x' source=3
+   3 | Break `,
+  },
+  {
+    scenario: "a more complex AST",
+    source: {
+      kind: "Program",
+      statements: [
+        {
+          kind: "Assignment",
+          target: "y",
+          source: {
+            kind: "BinaryExpression",
+            op: "*",
+            left: { kind: "Call", callee: "hypot", args: [3, 5] },
+            right: "x",
+          },
+        },
+      ],
+    },
+    expected: `   1 | Program statements=[#2]
+   2 | Assignment target='y' source=#3
+   3 | BinaryExpression op='*' left=#4 right='x'
+   4 | Call callee='hypot' args=[3,5]`,
+  },
+];
+
 describe("The stringify function", () => {
   for (const primitive of [undefined, null, false, 8, "dog"]) {
     it(`ignores the primitive value ${primitive}`, () => {
@@ -141,6 +179,11 @@ describe("The stringify function", () => {
   for (const { scenario, source, expected } of fixture) {
     it(`correctly stringifies ${scenario}`, () => {
       assert.equal(stringify(source), expected);
+    });
+  }
+  for (const { scenario, source, expected } of fixtureWithKeyProperty) {
+    it(`correctly stringifies ${scenario}`, () => {
+      assert.equal(stringify(source, "kind"), expected);
     });
   }
 });
